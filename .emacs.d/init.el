@@ -188,7 +188,8 @@
   ("f" nil "finished" :exit t))
 
 (ai/leader-keys
-  "ts" '(hydra-text-scale/body :which-key "scale text"))
+  "ts" '(hydra-text-scale/body :which-key "scale text")
+  "g" '(magit-file-dispatch :which-key "magit-file-dispatch"))
 
 (use-package magit)
 
