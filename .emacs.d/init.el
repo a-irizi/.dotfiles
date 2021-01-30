@@ -121,7 +121,10 @@
   :after counsel
   :config
   (ivy-prescient-mode 1))
-(use-package company-prescient)
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
 (use-package selectrum-prescient)
 
 (use-package ivy-rich
