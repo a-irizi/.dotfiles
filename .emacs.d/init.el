@@ -214,7 +214,10 @@
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (lsp-enable-which-key-integration t))
+  (lsp-enable-which-key-integration t)
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-idle-delay 0.500))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
