@@ -113,7 +113,10 @@
   :config
   (ivy-mode 1))
 
-(use-package prescient)
+(use-package prescient
+  :config
+  (setq prescient-sort-length-enable nil)
+  (prescient-persist-mode 1))
 (use-package ivy-prescient
   :after counsel
   :config
