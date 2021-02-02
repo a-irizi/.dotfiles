@@ -121,6 +121,7 @@
   :config
   (setq prescient-sort-length-enable nil)
   (prescient-persist-mode 1))
+
 (use-package ivy-prescient
   :after counsel
   :config
@@ -141,7 +142,6 @@
 	 ("C-x C-f" . counsel-find-file)
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
-
 
 (use-package evil
   :init
