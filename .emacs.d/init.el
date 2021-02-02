@@ -266,6 +266,11 @@
   (add-to-list 'company-backends 'company-c-headers)
   (add-to-list 'company-backends 'company-yasnippet))
 
+(use-package company-prescient
+  :after company
+  :config
+  (company-prescient-mode 1))
+
 
 
 (custom-set-variables
