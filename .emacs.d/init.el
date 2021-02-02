@@ -239,6 +239,13 @@
   :hook ((c-mode c++-mode objc-mode cuda-mode) .
 	 (lambda () (require 'ccls) (lsp))))
 
+(use-package yasnippet
+  :config
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  (define-key yas-minor-mode-map (kbd "C-l") yas-maybe-expand))
+(yas-global-mode t)
+
 
 
 (custom-set-variables
