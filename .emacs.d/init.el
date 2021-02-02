@@ -229,6 +229,13 @@
 (use-package lsp-java
   :config (add-hook 'java-mode-hook 'lsp))
 
+(use-package treemacs)
+
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+;; (use-package ccls
+;; :hook ((c-mode c++-mode objc-mode cuda-mode) .
+;; (lambda () (require 'ccls) (lsp))))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
