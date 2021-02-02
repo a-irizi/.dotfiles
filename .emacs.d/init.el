@@ -224,6 +224,8 @@
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.200))
 
+(use-package lsp-ui)
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
