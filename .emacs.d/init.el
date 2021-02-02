@@ -204,7 +204,7 @@
 (use-package magit)
 
 (use-package flycheck
-  :hook (prog-mode . flycheck-mode))
+  :hook (lsp-mode . flycheck-mode))
 
 (use-package autopair
   :config (autopair-global-mode))
