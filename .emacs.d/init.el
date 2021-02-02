@@ -226,6 +226,9 @@
 
 (use-package lsp-ui)
 
+(use-package lsp-java
+  :config (add-hook 'java-mode-hook 'lsp))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
