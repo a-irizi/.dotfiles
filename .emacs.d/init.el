@@ -271,6 +271,7 @@
   :config
   (company-prescient-mode 1))
 
+(use-package company-c-headers)
 
 
 (custom-set-variables
