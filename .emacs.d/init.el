@@ -246,6 +246,8 @@
   (define-key yas-minor-mode-map (kbd "C-l") yas-maybe-expand))
 (yas-global-mode t)
 
+(use-package yasnippet-snippets)
+
 
 
 (custom-set-variables
