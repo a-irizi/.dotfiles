@@ -248,6 +248,24 @@
 
 (use-package yasnippet-snippets)
 
+(use-package company
+  :hook (prog-mode . company-mode)
+  :bind (:map company-active-map
+	      ("<tab>" . company-complete-selection))
+  (:map company-active-map
+	("C-h" . evil-delete-backward-char-and-join))
+  (:map lsp-mode-map
+	("<tab>" . company-indent-or-complete-common))
+  (:map lsp-mode-map
+	("C-j" . company-select-next))
+  (:map lsp-mode-map
+	("C-k" . company-select-previous))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0)
+  (add-to-list 'company-backends 'company-c-headers)
+  (add-to-list 'company-backends 'company-yasnippet))
+
 
 
 (custom-set-variables
