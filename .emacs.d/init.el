@@ -121,7 +121,6 @@
   :config
   (setq prescient-sort-length-enable nil)
   (prescient-persist-mode 1))
-
 (use-package ivy-prescient
   :after counsel
   :config
@@ -142,6 +141,7 @@
 	 ("C-x C-f" . counsel-find-file)
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
+
 
 (use-package evil
   :init
@@ -204,7 +204,7 @@
 (use-package magit)
 
 (use-package flycheck
-  :hook (lsp-mode . flycheck-mode))
+  :hook (prog-mode . flycheck-mode))
 
 (use-package autopair
   :config (autopair-global-mode))
@@ -213,66 +213,15 @@
   :config
   (global-evil-surround-mode 1))
 
-
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :init
   (setq lsp-keymap-prefix "C-c l")
   :config
-  (setq lsp-enable-snippet t)
   (lsp-enable-which-key-integration t)
   (setq gc-cons-threshold 100000000)
   (setq read-process-output-max (* 1024 1024))
-  (setq lsp-idle-delay 0.200))
-
-(use-package lsp-ui)
-
-(use-package lsp-java
-  :config (add-hook 'java-mode-hook 'lsp))
-
-(use-package treemacs)
-
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-	 (lambda () (require 'ccls) (lsp))))
-
-(use-package yasnippet
-  :config
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "C-l") yas-maybe-expand))
-(yas-global-mode t)
-
-(use-package yasnippet-snippets)
-
-(use-package company
-  :hook (prog-mode . company-mode)
-  :bind (:map company-active-map
-	      ("<tab>" . company-complete-selection))
-  (:map company-active-map
-	("C-h" . evil-delete-backward-char-and-join))
-  (:map lsp-mode-map
-	("<tab>" . company-indent-or-complete-common))
-  (:map lsp-mode-map
-	("C-j" . company-select-next))
-  (:map lsp-mode-map
-	("C-k" . company-select-previous))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0)
-  (add-to-list 'company-backends 'company-c-headers)
-  (add-to-list 'company-backends 'company-yasnippet))
-
-(use-package company-prescient
-  :after company
-  :config
-  (company-prescient-mode 1))
-
-(use-package company-c-headers)
-
-(use-package company-box
-:hook (company-mode . company-box-mode))
+  (setq lsp-idle-delay 0.500))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -280,7 +229,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(company-box company-c-headers yasnippet-snippets yasnippet company-mode ccls lsp-ivy lsp-ui lsp-mode evil-surround autopair undo-fu-session undo-fu general hydra selectrum-prescient company-prescient ivy-prescient prescient flycheck evil-collection magit doom-themes helpful all-the-icons-ivy all-the-icons-ivy-rich counsel ivy-rich which-key use-package rainbow-delimiters ivy evil doom-modeline)))
+   '(lsp-mode evil-surround autopair undo-fu-session undo-fu general hydra selectrum-prescient company-prescient ivy-prescient prescient flycheck evil-collection magit doom-themes helpful all-the-icons-ivy all-the-icons-ivy-rich counsel ivy-rich which-key use-package rainbow-delimiters ivy evil doom-modeline)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
