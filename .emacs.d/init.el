@@ -235,9 +235,10 @@
   :config (lsp-treemacs-sync-mode 1)
   :commands lsp-treemacs-errors-list)
 
-;; (use-package ccls
-;; :hook ((c-mode c++-mode objc-mode cuda-mode) .
-;; (lambda () (require 'ccls) (lsp))))
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+	 (lambda () (require 'ccls) (lsp))))
+
 
 
 (custom-set-variables
