@@ -273,6 +273,8 @@
 
 (use-package company-c-headers)
 
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
