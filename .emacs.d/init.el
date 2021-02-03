@@ -224,6 +224,30 @@
   (setq read-process-output-max (* 1024 1024))
   (setq lsp-idle-delay 0.200))
 
+(defun my-c++-mode-hook ()
+  "Hook for `c++-mode'"
+  (set (make-local-variable 'company-backends)
+       '((company-capf company-dabbrev-code company-yasnippet company-files))))
+
+(add-hook 'c++-mode-hook 'my-c++-mode-hook)
+(add-hook 'c++-mode-hook 'company-mode)
+
+(defun my-c-mode-hook ()
+  "Hook for `c-mode'"
+  (set (make-local-variable 'company-backends)
+       '((company-capf company-dabbrev-code company-yasnippet company-files))))
+
+(add-hook 'c-mode-hook 'my-c-mode-hook)
+(add-hook 'c-mode-hook 'company-mode)
+
+(defun my-java-mode-hook ()
+  "Hook for `java-mode'"
+  (set (make-local-variable 'company-backends)
+       '((company-capf company-dabbrev-code company-yasnippet company-files))))
+
+(add-hook 'java-mode-hook 'my-java-mode-hook)
+(add-hook 'java-mode-hook 'company-mode)
+
 (use-package lsp-ui)
 
 (use-package lsp-java
