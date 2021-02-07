@@ -322,6 +322,11 @@
 		  (org-level-8 . 0.9)))
     (set-face-attribute (car face) nil :font "Cantarell" :weight 'bold :height (cdr face))))
 
+(defun ai/org-mode-setup ()
+  (org-indent-mode)
+  ;; (variable-pitch-mode 1)
+  (visual-line-mode 1))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
