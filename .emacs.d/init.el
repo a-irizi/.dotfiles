@@ -9,6 +9,9 @@
 ;; Set the font
 (set-face-attribute 'default nil :font "Fira Code Retina" :height 110)
 
+;; Set the fixed pitch face
+(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 110)
+
 ;; Set uo the visible bell
 (setq visible-bell t)
 
