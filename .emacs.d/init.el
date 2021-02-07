@@ -327,6 +327,14 @@
   ;; (variable-pitch-mode 1)
   (visual-line-mode 1))
 
+(use-package org
+  :pin org
+  :hook (org-mode . ai/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾"
+	org-hide-emphasis-markers t)
+  (ai/org-font-setup))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
