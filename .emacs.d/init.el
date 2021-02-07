@@ -305,6 +305,23 @@
 
 (use-package company-box
   :hook (company-mode . company-box-mode))
+(defun ai/org-font-setup ()
+  ;; Replace list hyphen with dot
+  ;; (font-lock-add-keywords 'org-mode
+  ;; '(("^ *\\([-]\\) "
+  ;; (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+
+
+  (dolist (face '((org-level-1 . 1.2)
+		  (org-level-2 . 1.1)
+		  (org-level-3 . 1.05)
+		  (org-level-4 . 1.0)
+		  (org-level-5 . 0.9)
+		  (org-level-6 . 0.9)
+		  (org-level-7 . 0.9)
+		  (org-level-8 . 0.9)))
+    (set-face-attribute (car face) nil :font "Cantarell" :weight 'bold :height (cdr face))))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
