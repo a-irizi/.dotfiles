@@ -12,6 +12,9 @@
 ;; Set the fixed pitch face
 (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 110)
 
+;; Set the variable pitch face
+(set-face-attribute 'variable-pitch nil :font "Cantarell" :height 110 :weight 'regular)
+
 ;; Set uo the visible bell
 (setq visible-bell t)
 
