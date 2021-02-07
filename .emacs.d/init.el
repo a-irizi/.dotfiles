@@ -335,6 +335,12 @@
 	org-hide-emphasis-markers t)
   (ai/org-font-setup))
 
+(use-package org-bullets
+  :after org
+  :hook (org-mode . org-bullets-mode)
+  :custom
+  (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
