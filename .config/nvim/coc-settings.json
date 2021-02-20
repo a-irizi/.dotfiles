@@ -1,7 +1,7 @@
 {
     "languageserver": {
-        "ccls": {
-            "command": "ccls",
+        "clangd": {
+            "command": "clangd",
             "filetypes": [
                 "c",
                 "cpp",
@@ -9,7 +9,7 @@
                 "objcpp"
             ],
             "rootPatterns": [
-                ".ccls",
+                ".clangd",
                 "compile_commands.json",
                 ".vim/",
                 ".git/",
@@ -17,7 +17,7 @@
             ],
             "initializationOptions": {
                 "cache": {
-                    "directory": "/tmp/ccls"
+                    "directory": "/tmp/clangd"
                 }
             }
         }
