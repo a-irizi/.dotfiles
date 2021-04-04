@@ -6,16 +6,31 @@
 
 (setq inhibit-startup-message t)
 
-;; Set the font
-(set-face-attribute 'default nil :font "Fira Code Retina" :height 110)
+;; Set default working directory if runing on windows
+(pcase system-type
+  ('windows-nt (setq default-directory "~/")))
 
-;; Set the fixed pitch face
-(set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height 110)
+(setq ai/default-font-size 110)
+(setq ai/default-variable-font-size 110)
+(defun ai/set-font-faces ()
+  "setting the font faces attributes"
+  (message "Setting faces!")
+  ;; Set the font
+  (set-face-attribute 'default nil :font "Fira Code Retina" :height ai/default-font-size)
+  ;; Set the fixed pitch face
+  (set-face-attribute 'fixed-pitch nil :font "Fira Code Retina" :height ai/default-font-size)
+  ;; Set the variable pitch face
+  (set-face-attribute 'variable-pitch nil :font "Cantarell" :height ai/default-variable-font-size :weight 'regular))
 
-;; Set the variable pitch face
-(set-face-attribute 'variable-pitch nil :font "Cantarell" :height 110 :weight 'regular)
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+	      (lambda (frame)
+		(setq doom-modeline-icon t)
+		(with-selected-frame frame
+		  (ai/set-font-faces))))
+  (ai/set-font-faces))
 
-;; Set uo the visible bell
+;; Set up the visible bell
 (setq visible-bell t)
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
@@ -31,6 +46,7 @@
   (add-hook mode (lambda () (display-line-numbers-mode 0))))
 
 (require 'package)
+(setq package-native-compile t)
 
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
 			 ("org" . "https://orgmode.org/elpa/")
@@ -47,26 +63,196 @@
 (require 'use-package)
 (setq use-package-always-ensure t)
 
-(use-package exec-path-from-shell)
-(when (memq window-system '(mac ns x))
-  (exec-path-from-shell-initialize))
+(use-package hydra)
+
+(defhydra hydra-text-scale (:timeout 4)
+  "scale text"
+  ("j" text-scale-increase "in")
+  ("k" text-scale-decrease "out")
+  ("f" nil "finished" :exit t))
+
+(use-package general
+  :config
+  (general-create-definer ai/leader-keys
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (ai/leader-keys
+    "g" '(magit-file-dispatch :which-key "magit-file-dispatch")
+    "j" '(counsel-switch-buffer :which-key "buffers")
+    "ts" '(hydra-text-scale/body :which-key "scale text")))
+
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 1))
+
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ("C-c d" . #'helpful-at-point)
+  ([remap describe-function] . counsel-describe-function)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-variable] . counsel-describe-variable)
+  ([remap describe-key] . helpful-key))
+
+(use-package evil
+  :init
+  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  :config
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-replace-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  ;; Use visual line motions evenjoutside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+(use-package evil-numbers
+  :bind
+  ("C-a" . evil-numbers/inc-at-pt)
+  ("C-S-a" . evil-numbers/dec-at-pt))
+
+(use-package evil-collection
+  :after evil
+  :config
+  (evil-collection-init))
+
+(use-package goto-chg)
+
+(use-package undo-fu
+  :config
+  ;; (global-undo-tree-mode -1)
+  (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
+  (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
+
+(use-package undo-fu-session
+  :config
+  (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+  (global-undo-fu-session-mode))
+
+(use-package flycheck
+  :hook (lsp-mode . flycheck-mode))
+
+(use-package lsp-mode
+  :commands (lsp lsp-deferred)
+  :hook
+  (c++-mode . lsp)
+  (c-mode . lsp)
+  (java-mode . lsp)
+  :init
+  (setq lsp-keymap-prefix "C-c l")
+  (setq lsp-enable-snippet t)
+  (setq gc-cons-threshold 100000000)
+  (setq read-process-output-max (* 1024 1024))
+  (setq lsp-idle-delay 0.200)
+  :config
+  (lsp-enable-which-key-integration t)
+)
+
+(use-package lsp-java
+  :hook (java-mode-hook . lsp))
+
+(use-package lsp-ui)
+
+;; Define functions for a functional yasnippet/company mode workflow
+(defun ai/yas-next-field-or-maybe-expand ()
+  "Call `open-line', unless there are abbrevs or snippets at point.
+In that case expand them.  If there's a snippet expansion in
+progress, move to the next field. Call `open-line' if nothing
+else applies."
+  (interactive)
+  (cond ((expand-abbrev))
+
+        ((yas-active-snippets)
+         (yas-next-field-or-maybe-expand))
+
+        ((ignore-errors
+           (yas-expand)))
+        ))
+
+(defun ai/yas-prev-field-or-ret ()
+  "Call `evil-ret', unless there is snippet at point.
+If there's a snippet expansion in progress, move to the previous
+field. Call `evil-ret' if nothing else applies."
+  (interactive)
+  (cond ((yas-active-snippets)
+         (yas-prev-field))
+
+	((ignore-errors
+	   (evil-ret)))
+        ))
+
+(global-set-key "\C-l" 'ai/yas-next-field-or-maybe-expand)
+(global-set-key "\C-m" 'ai/yas-prev-field-or-ret)
+
+(use-package yasnippet
+  :config
+  (define-key yas-minor-mode-map (kbd "<tab>") nil)
+  (define-key yas-minor-mode-map (kbd "TAB") nil)
+  ;; (define-key yas-minor-mode-map (kbd "C-l") ai/yas-next-field-or-maybe-expand)
+
+  ;; keys for navigation
+  (define-key yas-keymap [(tab)]       nil)
+  (define-key yas-keymap (kbd "TAB")   nil)
+  (define-key yas-keymap [(shift tab)] nil)
+  (define-key yas-keymap [backtab]     nil)
+  ;; (define-key yas-keymap (kbd "C-m") 'ai/yas-prev-field-or-ret)
+
+  (yas-global-mode t))
+
+(use-package yasnippet-snippets)
+
+(use-package company
+  :hook (prog-mode . company-mode)
+  :bind
+  (:map company-active-map
+	("<tab>" . company-complete-selection))
+  (:map company-active-map
+	("TAB" . company-complete-selection))
+  (:map company-active-map
+	("C-h" . evil-delete-backward-char-and-join))
+  (:map company-active-map
+	("C-g" . company-abort))
+  (:map company-active-map
+	("C-j" . company-select-next))
+  (:map company-active-map
+	("C-k" . company-select-previous))
+  :custom
+  (company-minimum-prefix-length 1)
+  (company-idle-delay 0.0)
+  (add-to-list 'company-backends 'company-c-headers)
+  (add-to-list 'company-backends 'company-yasnippet))
+
+(use-package company-box
+  :hook (company-mode . company-box-mode))
 
 (use-package doom-themes
   :config
   ;; Global settings (defaults)
   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+	doom-themes-enable-italic t) ; if nil, italics is universally disabled
   (load-theme 'doom-dracula t)
 
   ;; Enable flashing mode-line on errors
   (doom-themes-visual-bell-config)
-  
+
   ;; Enable custom neotree theme (all-the-icons must be installed!)
   (doom-themes-neotree-config)
   ;; or for treemacs users
   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
   (doom-themes-treemacs-config)
-  
+
   ;; Corrects (and improves) org-mode's native fontification.
   (doom-themes-org-config))
 
@@ -86,22 +272,11 @@
 (use-package rainbow-delimiters
   :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package which-key
-  :init (which-key-mode)
-  :diminish which-key-mode
+(use-package smartparens
   :config
-  (setq which-key-idle-delay 1))
-
-(use-package helpful
-  :custom
-  (counsel-describe-function-function #'helpful-callable)
-  (counsel-describe-variable-function #'helpful-variable)
-  :bind
-  ("C-c d" . #'helpful-at-point)
-  ([remap describe-function] . counsel-describe-function)
-  ([remap describe-command] . helpful-command)
-  ([remap describe-variable] . counsel-describe-variable)
-  ([remap describe-key] . helpful-key))
+  (require 'smartparens-config)
+  :hook
+  (prog-mode . smartparens-mode))
 
 (use-package ivy
   :diminish
@@ -132,11 +307,11 @@
   :after counsel
   :config
   (ivy-prescient-mode 1))
+
 (use-package company-prescient
   :after company
   :config
   (company-prescient-mode 1))
-(use-package selectrum-prescient)
 
 (use-package ivy-rich
   :init (ivy-rich-mode 1))
@@ -149,167 +324,11 @@
 	 :map minibuffer-local-map
 	 ("C-r" . 'counsel-minibuffer-history)))
 
-(use-package evil
-  :init
-  (setq evil-want-integration t) ;; This is optional since it's already set to t by default.
-  (setq evil-want-keybinding nil)
-  (setq evil-want-C-u-scroll t)
-  :config
-  (evil-mode 1)
-  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
-
-  ;; Use visual line motions evenjoutside of visual-line-mode buffers
-  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-
-  (evil-set-initial-state 'messages-buffer-mode 'normal)
-  (evil-set-initial-state 'dashboard-mode 'normal))
-
-(use-package evil-collection
-  :after evil
-  :config
-  (evil-collection-init))
-
-(use-package goto-chg)
-
-(use-package undo-fu
-  :config
-  ;; (global-undo-tree-mode -1)
-  (define-key evil-normal-state-map "u" 'undo-fu-only-undo)
-  (define-key evil-normal-state-map "\C-r" 'undo-fu-only-redo))
-
-(use-package undo-fu-session
-  :config
-  (setq undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
-
-(global-undo-fu-session-mode)
-
-(use-package general
-  :config
-  (general-create-definer ai/leader-keys
-    :keymaps '(normal insert visual emacs)
-    :prefix "SPC"
-    :global-prefix "C-SPC")
-
-  (ai/leader-keys
-    "b" '(counsel-ibuffer :which-key "buffers")))
-
-(use-package hydra)
-
-(defhydra hydra-text-scale (:timeout 4)
-  "scale text"
-  ("j" text-scale-increase "in")
-  ("k" text-scale-decrease "out")
-  ("f" nil "finished" :exit t))
-
-(ai/leader-keys
-  "ts" '(hydra-text-scale/body :which-key "scale text")
-  "g" '(magit-file-dispatch :which-key "magit-file-dispatch"))
-
-(use-package magit)
-
-(use-package flycheck
-  :hook (lsp-mode . flycheck-mode))
-
-(use-package autopair
-  :config (autopair-global-mode))
-
-(use-package evil-surround
-  :config
-  (global-evil-surround-mode 1))
-
-(use-package lsp-mode
-  :commands (lsp lsp-deferred)
-  :init
-  (setq lsp-keymap-prefix "C-c l")
-  :config
-  (setq lsp-enable-snippet t)
-  (lsp-enable-which-key-integration t)
-  (setq gc-cons-threshold 100000000)
-  (setq read-process-output-max (* 1024 1024))
-  (setq lsp-idle-delay 0.200))
-
-(defun my-c++-mode-hook ()
-  "Hook for `c++-mode'"
-  (set (make-local-variable 'company-backends)
-       '((company-capf company-dabbrev-code company-yasnippet company-files))))
-
-(add-hook 'c++-mode-hook 'my-c++-mode-hook)
-(add-hook 'c++-mode-hook 'company-mode)
-
-(defun my-c-mode-hook ()
-  "Hook for `c-mode'"
-  (set (make-local-variable 'company-backends)
-       '((company-capf company-dabbrev-code company-yasnippet company-files))))
-
-(add-hook 'c-mode-hook 'my-c-mode-hook)
-(add-hook 'c-mode-hook 'company-mode)
-
-(defun my-java-mode-hook ()
-  "Hook for `java-mode'"
-  (set (make-local-variable 'company-backends)
-       '((company-capf company-dabbrev-code company-yasnippet company-files))))
-
-(add-hook 'java-mode-hook 'my-java-mode-hook)
-(add-hook 'java-mode-hook 'company-mode)
-
-(use-package lsp-ui)
-
-(use-package lsp-java
-  :config (add-hook 'java-mode-hook 'lsp))
-
-(use-package treemacs)
-
-(use-package lsp-treemacs
-  :config (lsp-treemacs-sync-mode 1)
-  :commands lsp-treemacs-errors-list)
-
-(use-package ccls
-  :hook ((c-mode c++-mode objc-mode cuda-mode) .
-	 (lambda () (require 'ccls) (lsp))))
-
-(use-package yasnippet
-  :config
-  (define-key yas-minor-mode-map (kbd "<tab>") nil)
-  (define-key yas-minor-mode-map (kbd "TAB") nil)
-  (define-key yas-minor-mode-map (kbd "C-l") yas-maybe-expand))
-(yas-global-mode t)
-
-(use-package yasnippet-snippets)
-
-(use-package company
-  :hook (prog-mode . company-mode)
-  :bind (:map company-active-map
-	      ("<tab>" . company-complete-selection))
-  (:map company-active-map
-	("C-h" . evil-delete-backward-char-and-join))
-  (:map lsp-mode-map
-	("<tab>" . company-indent-or-complete-common))
-  (:map lsp-mode-map
-	("C-j" . company-select-next))
-  (:map lsp-mode-map
-	("C-k" . company-select-previous))
-  :custom
-  (company-minimum-prefix-length 1)
-  (company-idle-delay 0.0)
-  (add-to-list 'company-backends 'company-c-headers)
-  (add-to-list 'company-backends 'company-yasnippet))
-
-(use-package company-prescient
-  :after company
-  :config
-  (company-prescient-mode 1))
-
-(use-package company-c-headers)
-
-(use-package company-box
-  :hook (company-mode . company-box-mode))
 (defun ai/org-font-setup ()
   ;; Replace list hyphen with dot
-  ;; (font-lock-add-keywords 'org-mode
-  ;; '(("^ *\\([-]\\) "
-  ;; (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "•"))))))
+  (font-lock-add-keywords 'org-mode
+			  '(("^ *\\([-]\\) "
+			     (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "►"))))))
 
 
   (dolist (face '((org-level-1 . 1.2)
@@ -331,8 +350,8 @@
   :pin org
   :hook (org-mode . ai/org-mode-setup)
   :config
-  (setq org-ellipsis " ▾"
-	org-hide-emphasis-markers t)
+  (setq org-ellipsis " ↯")
+  ;; (setq org-hide-emphasis-markers t)
   (ai/org-font-setup))
 
 (use-package org-bullets
@@ -349,13 +368,16 @@
 (use-package visual-fill-column
   :hook (org-mode . ai/org-mode-visual-fill))
 
+(use-package magit)
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(c++-mode company-box company-c-headers yasnippet-snippets yasnippet company-mode ccls lsp-ivy lsp-ui lsp-mode evil-surround autopair undo-fu-session undo-fu general hydra selectrum-prescient company-prescient ivy-prescient prescient flycheck evil-collection magit doom-themes helpful all-the-icons-ivy all-the-icons-ivy-rich counsel ivy-rich which-key use-package rainbow-delimiters ivy evil doom-modeline)))
+   '(evil-numbers evil-collection magit smartparens visual-fill-column org-bullets undo-fu-session undo-fu lsp-mode evil use-package)))
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
