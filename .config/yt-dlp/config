@@ -1,0 +1,13 @@
+# Placeholder value for unavailable meta fields in output
+# filename template (default: "NA")
+--output-na-placeholder ''
+
+# Restrict filenames to only ASCII characters, and avoid
+# "&" and spaces in
+# --restrict-filenames
+
+# Add chapter markers to the video file
+# (Alias: --add-chapters)
+--embed-chapters
+
+-o "%(uploader)s - %(title)s.%(ext)s"
