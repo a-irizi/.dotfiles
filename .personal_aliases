@@ -1,0 +1,5 @@
+alias virc="nvim ~/.config/nvim/init.lua"
+alias ym="yt-dlp -f bestaudio --no-playlist -P \"~/Music\" -o \"%(channel)s/%(title)s.%(ext)s\""
+alias yv="yt-dlp --no-playlist -o \"%(channel)s/%(channel)s - %(title)s.%(ext)s\""
+alias ymp="yt-dlp -f bestaudio --yes-playlist -P \"~/Music\" -o \"%(channel)s/%(playlist)s/%(playlist_index)s-%(playlist)s - %(title)s.%(ext)s\""
+alias yvp="yt-dlp --yes-playlist -o \"%(channel)s/%(playlist)s/%(channel)s-%(playlist_index)s-%(playlist)s - %(title)s.%(ext)s\""
