@@ -1,6 +1,6 @@
 # ls
 alias l="ls -lh"
-alias ll="ls -lah"
+alias ll="ls -lAh"
 
 # vim/neovim
 alias virc="nvim ~/.config/nvim/init.lua"
