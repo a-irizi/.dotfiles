@@ -1,2 +1,0 @@
-function G++() { g++ -o "${1%.*}" "$1" ; }
-function GCC() { gcc -o "${1%.*}" "$1" ; }
