@@ -6,6 +6,9 @@
 # "&" and spaces in
 # --restrict-filenames
 
+# Embed thumbnail in the video as cover art
+--embed-thumbnail
+
 # Add chapter markers to the video file
 # (Alias: --add-chapters)
 --embed-chapters
