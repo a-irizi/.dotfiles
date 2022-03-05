@@ -4,3 +4,4 @@
 .config/nvim/tmp
 .config/nvim/session.vim
 .config/nvim/Session.vim
+.config/nvim/plugin
