@@ -1,3 +1,5 @@
-require("general")
-require("mappings")
-require("packages")
+require("base")
+require("highlights")
+require("maps")
+require("functions")
+require("plugins")
