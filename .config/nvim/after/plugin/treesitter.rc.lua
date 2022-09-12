@@ -11,10 +11,10 @@ ts.setup({
 	rainbow = {
 		enable = true,
 		-- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
-		extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+		extended_mode = false, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
 		max_file_lines = nil, -- Do not enable for files with more than n lines, int
-		-- colors = {}, -- table of hex strings
-		-- termcolors = {} -- table of colour name strings
+		colors = { "#8ebaa4", "#e0c989", "#86abdc", "#baa1e2", "#7ad4d6" }, -- table of hex strings
+		-- termcolors = { "color10", "color11", "color12", "color13", "color14" }, -- table of colour name strings
 	},
 	indent = {
 		enable = true,

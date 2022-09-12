@@ -23,7 +23,7 @@ local usestate = s({
 	f(function(args, snip)
 		return "set" .. string.sub(args[1][1], 1, 1):upper() .. string.sub(args[1][1], 2, args[1][1]:len())
 	end, 1),
-	t(" = useState("),
+	t("] = useState("),
 	i(2),
 	t(")"),
 })

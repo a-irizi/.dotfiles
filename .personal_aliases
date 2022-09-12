@@ -8,9 +8,9 @@ alias vialias="nvim ~/.personal_aliases"
 
 # yt-dlp
 alias ym="yt-dlp -f bestaudio --no-embed-thumbnail --no-playlist -P \"~/Music\" -o \"%(channel)s/%(title)s.%(ext)s\""
-alias yv="yt-dlp --no-playlist -o \"%(channel)s/%(channel)s - %(title)s.%(ext)s\""
+alias yv="yt-dlp --embed-chapters --embed-thumbnail --no-playlist -o \"%(channel)s/%(channel)s - %(title)s.%(ext)s\""
 alias ymp="yt-dlp -f bestaudio --no-embed-thumbnail --yes-playlist -P \"~/Music\" -o \"%(channel)s/%(playlist)s/%(playlist_index)s.%(title)s.%(ext)s\""
-alias yvp="yt-dlp --yes-playlist -o \"%(channel)s/%(playlist)s/%(channel)s-%(playlist_index)s-%(playlist)s - %(title)s.%(ext)s\""
+alias yvp="yt-dlp --embed-chapters --embed-thumbnail --yes-playlist -o \"%(channel)s/%(playlist)s/%(channel)s-%(playlist_index)s-%(playlist)s - %(title)s.%(ext)s\""
 
 # C/C++
 function G++() { g++ -o "${1%.*}" "$1" ; }
