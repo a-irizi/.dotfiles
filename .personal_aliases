@@ -4,6 +4,7 @@ alias l="ls -lhF"
 alias ll="ls -lAhF"
 
 # vim/neovim
+alias vim="nvim"
 alias virc="nvim ~/.config/nvim/init.lua"
 alias vialias="nvim ~/.personal_aliases"
 
