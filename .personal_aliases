@@ -1,6 +1,7 @@
 # ls
-alias l="ls -lh"
-alias ll="ls -lAh"
+alias ls="ls -F"
+alias l="ls -lhF"
+alias ll="ls -lAhF"
 
 # vim/neovim
 alias virc="nvim ~/.config/nvim/init.lua"
