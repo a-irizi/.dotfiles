@@ -1,3 +1,5 @@
+#!/usr/bin/zsh
+
 # ls
 alias ls="ls -F"
 alias l="ls -lhF"
@@ -14,6 +16,41 @@ alias ym="yt-dlp -f bestaudio --no-embed-thumbnail --no-playlist -P \"~/Music\" 
 alias yv="yt-dlp --embed-chapters --embed-thumbnail --no-playlist -o \"%(channel)s/%(channel)s - %(title)s.%(ext)s\""
 alias ymp="yt-dlp -f bestaudio --no-embed-thumbnail --yes-playlist -P \"~/Music\" -o \"%(channel)s/%(playlist)s/%(playlist_index)s.%(title)s.%(ext)s\""
 alias yvp="yt-dlp --embed-chapters --embed-thumbnail --yes-playlist -o \"%(channel)s/%(playlist)s/%(channel)s-%(playlist_index)s-%(playlist)s - %(title)s.%(ext)s\""
+
+# tmux
+alias t="tmux"
+alias tls="tmux ls"
+alias ta="tmux attach"
+function td() {
+  tmux new-session -As $(basename $PWD | tr . -)
+}
+function tn() {
+  tmux new -s $1
+}
+function to() {
+  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --height=40% --reverse --cycle --header="Choose a session")
+  if [ -z $session ]; then
+    return 1
+  fi
+  tmux attach -t $session
+}
+function tk() {
+  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --multi --height=40% --reverse --cycle --header="Choose a session")
+  if [ -z $session ]; then
+    return 1
+  fi
+  if [[ $(echo $session | wc -l) > 1 ]]; then
+    echo $session | xargs -I {} tmux kill-session -t {}
+    # array=("${(@f)session}")
+    # for s in $array; do
+    #   tmux kill-session -t $s
+    # done
+  else
+    tmux kill-session -t $session
+  fi
+}
+alias tka="tmux ls | cut -d : -f 1 | xargs -I {} tmux kill-session -t {}"
+alias tkc="tmux display-message -p '#S' | xargs -I {} tmux kill-session -t {}"
 
 # C/C++
 function G++() { g++ -o "${1%.*}" "$1" ; }
