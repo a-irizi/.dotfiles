@@ -1,7 +1,7 @@
 #!/usr/bin/zsh
 
 # ls
-alias ls="ls -F"
+alias ls="ls --color=auto -F"
 alias l="ls -lhF"
 alias ll="ls -lAhF"
 
@@ -28,14 +28,14 @@ function tn() {
   tmux new -s $1
 }
 function to() {
-  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --height=40% --reverse --cycle --header="Choose a session")
+  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --border --height=40% --reverse --cycle --header="Choose a session")
   if [ -z $session ]; then
     return 1
   fi
   tmux attach -t $session
 }
 function tk() {
-  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --multi --height=40% --reverse --cycle --header="Choose a session")
+  [[ "$#" == 1 ]] && session=$1 || session=$(tmux list-sessions -F\#S | fzf --border --multi --height=40% --reverse --cycle --header="Choose a session")
   if [ -z $session ]; then
     return 1
   fi
