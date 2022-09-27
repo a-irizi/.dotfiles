@@ -1,6 +1,8 @@
 #!/bin/bash
 
 pgrep -x sxhkd > /dev/null || sxhkd &
+blueberry-tray &
+nm-applet &
 dunst &
 picom -fb --experimental-backends --backend glx&
 numlockx &
