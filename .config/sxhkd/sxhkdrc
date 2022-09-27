@@ -8,7 +8,7 @@ super + Return
   dolphin
 
 super + Escape
-  pkill -SIGUSR1 sxhkd
+  pkill -SIGUSR1 sxhkd; notify-send "SXHKD" "Config reloaded"
 
 # lock screen
 super + x
