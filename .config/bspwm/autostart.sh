@@ -6,11 +6,12 @@ function run {
   fi
 }
 
-run sxhkd &
-run blueberry-tray &
-run nm-applet &
-run dunst &
-run picom -fb --experimental-backends --backend glx&
+run sxhkd
+run lxsession
+run blueberry-tray
+run nm-applet
+run dunst
+run picom -fb --experimental-backends --backend glx
 numlockx &
 setxkbmap -option "ctrl:swapcaps" &
 nitrogen --restore &
