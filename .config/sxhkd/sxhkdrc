@@ -49,12 +49,14 @@ XF86AudioMicMute
 #
 
 # set the window state
-super + {t,shift + t,s}
-  bspc node -t {tiled,pseudo_tiled,floating}
+super + {t,shift + t}
+  bspc node -t {tiled,pseudo_tiled}
 
-# toggle fullscreen
+# toggle fullscreen/floating
 super + f
   bspc node --state \~fullscreen
+super + s
+  bspc node --state \~floating
 
 # set the node flags
 super + ctrl + {m,x,y,z}
