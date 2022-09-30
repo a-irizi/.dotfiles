@@ -15,8 +15,10 @@ super + x
   betterlockscreen -l
 
 # quit/restart bspwm
-super + shift + {x,r}
-  bspc {quit,wm -r}
+super + shift + x
+  bspc quit
+super + shift + r
+  bspc wm -r; notify-send "BSPWM" "Window Manager Restarted"
 
 # close and kill
 super + {_,shift + }q
