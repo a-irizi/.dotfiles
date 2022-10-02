@@ -34,7 +34,7 @@ super + y
 
 # swap the current node and the biggest window
 super + g
-  bspc node -s biggest.window
+  bspc node -s biggest.local.window
 
 XF86MonBrightness{Up,Down}
   brightnessctl s {+5%,5%-}
