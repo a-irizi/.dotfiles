@@ -2,7 +2,7 @@ super + d
   rofi -modi drun,run -show drun
 
 super + @space
-  kitty
+  alacritty
 
 super + Return
   dolphin
