@@ -4,8 +4,3 @@ env:
 import:
   - ~/.config/alacritty/theme.yml
   - ~/.config/alacritty/fonts.yml
-
-window:
-  padding:
-    x: 10
-    y: 10
