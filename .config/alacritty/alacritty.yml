@@ -2,8 +2,8 @@ env:
   TERM: xterm-256color
 
 import:
-  - ~/.dotfiles/.config/alacritty/theme.yml
-  - ~/.dotfiles/.config/alacritty/fonts.yml
+  - ~/.config/alacritty/theme.yml
+  - ~/.config/alacritty/fonts.yml
 
 window:
   padding:
