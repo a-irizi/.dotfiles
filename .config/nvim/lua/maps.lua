@@ -10,6 +10,13 @@ keymap({ "n", "i", "v", "s", "c" }, "<C-g>", "<ESC>")
 keymap("n", "<C-s>", ":w<CR>")
 keymap("i", "<C-s>", "<esc>:w<CR>a")
 keymap("v", "<C-s>", "<esc>:w<CR>gv")
+-- formatting
+keymap("n", "<C-M-i>", function()
+	vim.lsp.buf.format()
+end, opts)
+keymap({ "s", "n" }, "<C-M-i>", function()
+	vim.lsp.buf.format()
+end, opts)
 -- new tab
 keymap("n", "te", ":tabedit<CR>", opts)
 -- split window
