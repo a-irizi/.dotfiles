@@ -17,7 +17,7 @@ return require("packer").startup(function(use)
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 	use({ "nvim-telescope/telescope-file-browser.nvim" })
-	use("EdenEast/nightfox.nvim")
+	use("Mofiqul/dracula.nvim")
 	use("kyazdani42/nvim-web-devicons")
 
 	use({ "norcalli/nvim-colorizer.lua", run = ":NightfoxCompile" })
@@ -90,7 +90,9 @@ return require("packer").startup(function(use)
 		tag = "*", -- Use for stability; omit to use `main` branch for the latest features
 	})
 	use("windwp/nvim-autopairs")
-	use("windwp/nvim-ts-autotag")
+	use({ "windwp/nvim-ts-autotag", requires = {
+		"nvim-treesitter/nvim-treesitter",
+	} })
 	use({ "dinhhuy258/git.nvim" })
 	use({
 		"lewis6991/gitsigns.nvim",
