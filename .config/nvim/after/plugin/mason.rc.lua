@@ -10,13 +10,14 @@ end
 mason.setup()
 mason_lspconfig.setup({
 	automatic_installation = true,
-	ensure_installed = {
-		"eslint_d",
-		"css-lsp",
-		"cssmodules-language-server",
-		"emmet-ls",
-		"lua-language-server",
-		"stylua",
-		"tailwindcss-language-server",
-	},
+	-- ensure_installed = {
+	-- 	"eslint_d",
+	-- 	"eslint_lsp",
+	-- 	"css-lsp",
+	-- 	"cssmodules-language-server",
+	-- 	"emmet-ls",
+	-- 	"lua-language-server",
+	-- 	"stylua",
+	-- 	"tailwindcss-language-server",
+	-- },
 })
