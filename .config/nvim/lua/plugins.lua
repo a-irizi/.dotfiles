@@ -17,7 +17,8 @@ return require("packer").startup(function(use)
 		requires = { { "nvim-lua/plenary.nvim" } },
 	})
 	use({ "nvim-telescope/telescope-file-browser.nvim" })
-	use("Mofiqul/dracula.nvim")
+	-- use("Mofiqul/dracula.nvim")
+	use("marko-cerovac/material.nvim")
 	use("kyazdani42/nvim-web-devicons")
 
 	use({ "norcalli/nvim-colorizer.lua", run = ":NightfoxCompile" })
