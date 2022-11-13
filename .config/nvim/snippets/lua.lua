@@ -59,8 +59,8 @@ local newSnippetSnippet = s(
 	fmt(
 		[[
 local {} = s(
-	{},
-  {}
+    {},
+    {}
 )
 table.insert({}, {})
 
@@ -73,11 +73,11 @@ table.insert({}, {})
 					nil,
 					fmt(
 						[[
-			{{
-			  trig = "{}",
-			  dscr = "{}"
-			}}
-			              ]],
+            {{
+              trig = "{}",
+              dscr = "{}"
+            }}
+                          ]],
 						{
 							r(1, "trigger"),
 							i(2, "snippet description"),
@@ -89,8 +89,8 @@ table.insert({}, {})
 					nil,
 					fmt(
 						[[
-			"{}"
-			            ]],
+            "{}"
+                        ]],
 						{
 							r(1, "trigger"),
 						}
@@ -103,15 +103,15 @@ table.insert({}, {})
 					nil,
 					fmt(
 						[=[
-	fmt(
-  	[[
+    fmt(
+    [[
 {}
-  	]],
-  	{{
-    	{}
-  	}}
-	)
-			            ]=],
+    ]],
+    {{
+        {}
+    }}
+    )
+                        ]=],
 						{
 							i(1),
 							i(2),
@@ -123,9 +123,9 @@ table.insert({}, {})
 					fmt(
 						[[
 {{
-  {}
+    {}
 }}
-			            ]],
+                        ]],
 						{
 							i(1),
 						}
@@ -178,7 +178,7 @@ local aLFunction = s(
 					fmt(
 						[[
 local {} = function({})
-  {}
+    {}
 end
 {}
     ]],
@@ -195,7 +195,7 @@ end
 					fmt(
 						[[
 local function {}({})
-  {}
+    {}
 end
 {}
     ]],
@@ -226,7 +226,7 @@ local aFunction = s(
 					fmt(
 						[[
 function {}({})
-  {}
+    {}
 end
 {}
     ]],
@@ -243,7 +243,7 @@ end
 					fmt(
 						[[
 {} = function({})
-  {}
+    {}
 end
 {}
     ]],

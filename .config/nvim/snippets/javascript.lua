@@ -23,7 +23,7 @@ local ifSnippet = s(
 	fmt(
 		[[
 if ({}) {{
-  {}
+    {}
 }}{}
     ]],
 		{
@@ -40,7 +40,7 @@ local elseIfSnippet = s(
 	fmt(
 		[[
 else if ({}) {{
-  {}
+    {}
 }}{}
     ]],
 		{
@@ -57,7 +57,7 @@ local elseSnippet = s(
 	fmt(
 		[[
 else {{
-  {}
+    {}
 }}{}
     ]],
 		{
@@ -80,7 +80,7 @@ local whileLoopSnippet = s({
 			fmt(
 				[[
 while ({}) {{
-  {}
+    {}
 }}
 {}
         ]],
@@ -96,7 +96,7 @@ while ({}) {{
 			fmt(
 				[[
 do {{
-  {}
+    {}
 }} while ({});
 {}
         ]],
@@ -124,7 +124,7 @@ local forLoopStatement = s(
 	fmt(
 		[[
 for ({}) {{
-  {}
+    {}
 }}
 {}
     ]],
@@ -172,7 +172,7 @@ local switchSnippet = s(
 	fmt(
 		[[
 switch({}) {{
-	{}
+    {}
 }}
 {}
     ]],
@@ -187,7 +187,7 @@ switch({}) {{
 {}
 
 default:
-  {};
+    {};
           ]],
 						{
 							r(1, "switch body"),
@@ -216,7 +216,7 @@ local caseSnippet = s(
 	fmt(
 		[[
 case {}:
-	{}
+    {}
 {}
     ]],
 		{
@@ -268,7 +268,7 @@ local functionSnippet = s(
 	fmt(
 		[[
 function {}({}) {{
-  {}
+    {}
 }}
 {}
     ]],
