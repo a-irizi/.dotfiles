@@ -4,9 +4,11 @@ local i = luasnip.i --> insert node
 local t = luasnip.t --> text node
 
 local c = luasnip.choice_node
+local r = luasnip.restore_node
 local d = luasnip.dynamic_node
 local f = luasnip.function_node
 local sn = luasnip.snippet_node
+local isn = luasnip.indent_snippet_node
 
 local fmt = require("luasnip.extras.fmt").fmt
 local rep = require("luasnip.extras").rep
@@ -15,7 +17,7 @@ local snippets, autosnippets = {}, {}
 
 local snippetBoilerPlate = s(
 	{
-		trig = "snb",
+		trig = ";sbp",
 		dscr = "Luasnip snippet file boiler plate.",
 	},
 	fmt(
@@ -26,9 +28,11 @@ local i = luasnip.i --> insert node
 local t = luasnip.t --> text node
 
 local c = luasnip.choice_node
+local r = luasnip.restore_node
 local d = luasnip.dynamic_node
 local f = luasnip.function_node
 local sn = luasnip.snippet_node
+local isn = luasnip.indent_snippet_node
 
 local fmt = require('luasnip.extras.fmt').fmt
 local rep = require('luasnip.extras').rep
@@ -46,8 +50,109 @@ return snippets, autosnippets
 	)
 )
 table.insert(autosnippets, snippetBoilerPlate)
+
+local newSnippetSnippet = s(
+	{
+		trig = ";nsnp",
+		dscr = "New Luasnip snippet boiler plate",
+	},
+	fmt(
+		[[
+local {} = s(
+	{},
+  {}
+)
+table.insert({}, {})
+
+{}
+    ]],
+		{
+			i(1, "mySnip"),
+			c(2, {
+				isn(
+					nil,
+					fmt(
+						[[
+			{{
+			  trig = "{}",
+			  dscr = "{}"
+			}}
+			              ]],
+						{
+							r(1, "trigger"),
+							i(2, "snippet description"),
+						}
+					),
+					"$PARENT_INDENT\t"
+				),
+				isn(
+					nil,
+					fmt(
+						[[
+			"{}"
+			            ]],
+						{
+							r(1, "trigger"),
+						}
+					),
+					"$PARENT_INDENT\t"
+				),
+			}),
+			c(3, {
+				sn(
+					nil,
+					fmt(
+						[=[
+	fmt(
+  	[[
+{}
+  	]],
+  	{{
+    	{}
+  	}}
+	)
+			            ]=],
+						{
+							i(1),
+							i(2),
+						}
+					)
+				),
+				isn(
+					nil,
+					fmt(
+						[[
+{{
+  {}
+}}
+			            ]],
+						{
+							i(1),
+						}
+					),
+					"$PARENT_INDENT\t"
+				),
+			}),
+
+			c(4, {
+				i(1, "autosnippets"),
+				i(2, "snippets"),
+			}),
+
+			rep(1),
+			i(0),
+		}
+	),
+	{
+		stored = {
+			["trigger"] = i(1, "snippetTrigger"),
+		},
+	}
+)
+table.insert(autosnippets, newSnippetSnippet)
+
 local aLocal = s(
-	"lcl",
+	";lcl",
 	fmt(
 		[[
 local {} = {}
