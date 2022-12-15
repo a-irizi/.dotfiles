@@ -13,4 +13,9 @@
 # (Alias: --add-chapters)
 --embed-chapters
 
+# Write subtitles
+--write-subs
+--write-auto-subs
+--sub-langs "en,fr,ar"
+
 -o "%(uploader)s - %(title)s.%(ext)s"
