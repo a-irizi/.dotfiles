@@ -16,6 +16,6 @@
 # Write subtitles
 --write-subs
 --write-auto-subs
---sub-langs "en,fr,ar"
+--sub-langs "en,en-.*,fr,fr-.*,ar,ar-.*"
 
 -o "%(uploader)s - %(title)s.%(ext)s"
