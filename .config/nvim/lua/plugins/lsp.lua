@@ -1,83 +1,121 @@
 local servers = {
-  tsserver = {},
-  lua_ls = {
-    workspace = { checkThirdParty = false },
-    telemetry = { enable = false },
-  },
-  rust_analyzer = {},
+	angularls = {},
+	cssls = {},
+	cssmodules_ls = {},
+	gopls = {
+		gopls = {
+			completeUnimported = true,
+			usePlaceholders = true,
+			analyses = {
+				unusedparams = true,
+			},
+		},
+	},
+	html = {},
+	htmx = {},
+	lua_ls = {
+		workspace = { checkThirdParty = false },
+		telemetry = { enable = false },
+	},
+	tsserver = {},
+	rust_analyzer = {
+		settings = {
+			["rust-analyzer"] = {
+				cargo = {
+					allFeatures = true,
+				},
+			},
+		},
+	},
 }
 
 local on_attach = function(_, bufnr)
-  local keymap = function(mode, keys, func, desc)
-    if desc then
-      desc = 'LSP: ' .. desc
-    end
+	local keymap = function(mode, keys, func, desc)
+		if desc then
+			desc = "LSP: " .. desc
+		end
 
-    vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
-  end
+		vim.keymap.set(mode, keys, func, { buffer = bufnr, desc = desc })
+	end
 
-  keymap('n', 'K', vim.lsp.buf.hover, 'Displays hover information')
-  keymap({'n', 'i'}, '<C-k>', vim.lsp.buf.signature_help, 'Signature help')
-  keymap('n', 'gd', vim.lsp.buf.definition, 'Go to definition')
-  keymap('n', 'gD', vim.lsp.buf.references, 'Find references')
-  keymap('n', 'gI', vim.lsp.buf.references, 'Go to implementation')
-  keymap('n', '<leader>ca', vim.lsp.buf.code_action, 'Code actions')
-  keymap('n', '<leader>fm', vim.lsp.buf.format, 'Format document')
-  keymap('n', '<leader>ds', vim.lsp.buf.document_symbol, 'Document Symbols')
-  keymap('n', '<leader>ws', vim.lsp.buf.workspace_symbol, 'Workspace Symbols')
+	local builtin = require("telescope.builtin")
+
+	keymap("n", "K", vim.lsp.buf.hover, "Displays hover information")
+	keymap({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature help")
+	keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
+	keymap("n", "<leader>ca", vim.lsp.buf.code_action, "Code actions")
+	keymap("n", "<leader>fm", vim.lsp.buf.format, "Format document")
+	keymap("n", "gd", builtin.lsp_definitions, "[G]oto [D]efinition")
+	keymap("n", "gr", builtin.lsp_references, "[G]oto [R]eferences")
+	keymap("n", "gI", builtin.lsp_implementations, "[G]oto [I]mplementation")
+	keymap("n", "<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+	keymap("n", "<leader>td", builtin.lsp_type_definitions, "Type [D]efinition")
+	keymap("n", "<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
+	keymap("n", "<leader>ws", builtin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
+	keymap("n", "<leader>q", builtin.diagnostics, "[W]orkspace [S]ymbols")
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { 'markdown', 'plaintext' },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      'documentation',
-      'detail',
-      'additionalTextEdits',
-    },
-  },
+	documentationFormat = { "markdown", "plaintext" },
+	snippetSupport = true,
+	preselectSupport = true,
+	insertReplaceSupport = true,
+	labelDetailsSupport = true,
+	deprecatedSupport = true,
+	commitCharactersSupport = true,
+	tagSupport = { valueSet = { 1 } },
+	resolveSupport = {
+		properties = {
+			"documentation",
+			"detail",
+			"additionalTextEdits",
+		},
+	},
 }
 
 return {
-  {
-    'williamboman/mason.nvim',
-    config = function()
-      require('mason').setup {}
-    end,
-  },
-  {
-    'williamboman/mason-lspconfig.nvim',
-    config = function()
-      local mason_lspconfig = require 'mason-lspconfig'
+	{
+		"williamboman/mason.nvim",
+		config = function()
+			require("mason").setup({})
+		end,
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
+		dependencies = {
+			{ "nvim-telescope/telescope.nvim", tag = "0.1.5" },
+		},
+		config = function()
+			local mason_lspconfig = require("mason-lspconfig")
 
-      mason_lspconfig.setup {
-        ensure_installed = vim.tbl_keys(servers),
-      }
+			mason_lspconfig.setup({
+				ensure_installed = vim.tbl_keys(servers),
+			})
 
-      mason_lspconfig.setup_handlers {
-        function(server_name)
-          require('lspconfig')[server_name].setup {
-            capabilities = capabilities,
-            on_attach = on_attach,
-            settings = servers[server_name],
-            filetypes = (servers[server_name] or {}).filetypes,
-          }
-        end,
-      }
-    end,
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      { 'folke/neodev.nvim', opts = {} },
-    },
-  },
+			mason_lspconfig.setup_handlers({
+				function(server_name)
+					require("lspconfig")[server_name].setup({
+						capabilities = capabilities,
+						on_attach = on_attach,
+						settings = servers[server_name],
+						filetypes = (servers[server_name] or {}).filetypes,
+					})
+				end,
+			})
+		end,
+	},
+	{
+		"neovim/nvim-lspconfig",
+		dependencies = {
+			{ "folke/neodev.nvim",             opts = {} },
+			{ "nvim-telescope/telescope.nvim", tag = "0.1.5" },
+			{ "j-hui/fidget.nvim",             opts = {} },
+		},
+	},
+	-- {
+	-- 	"mrcjkb/rustaceanvim",
+	-- 	version = "^4", -- Recommended
+	-- 	ft = { "rust" },
+	-- },
 }
