@@ -2,6 +2,8 @@ local servers = {
 	angularls = {},
 	cssls = {},
 	cssmodules_ls = {},
+	docker_compose_language_service = {},
+	dockerls = {},
 	gopls = {
 		gopls = {
 			completeUnimported = true,
@@ -108,14 +110,41 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {
+
 			{ "folke/neodev.nvim",             opts = {} },
 			{ "nvim-telescope/telescope.nvim", tag = "0.1.5" },
 			{ "j-hui/fidget.nvim",             opts = {} },
 		},
 	},
+	{
+		"rust-lang/rust.vim",
+		ft = "rust",
+		config = function()
+			vim.g.rustfmt_autosave = 1
+		end,
+	},
 	-- {
-	-- 	"mrcjkb/rustaceanvim",
-	-- 	version = "^4", -- Recommended
-	-- 	ft = { "rust" },
+	-- 	"simrat39/rust-tools.nvim",
+	-- 	dependencies = "neovim/nvim-lspconfig",
+	-- 	ft = "rust",
+	-- 	opts = function()
+	-- 		return {
+	-- 			server = {
+	-- 				on_attach = on_attach,
+	-- 				capabilities = capabilities,
+	-- 			},
+	-- 		}
+	-- 	end,
+	-- 	config = function(_, opts)
+	-- 		require "rust-tools".setup(opts);
+	-- 	end,
+	-- },
+
+	-- NOTE: install codelldb -- using mason run :MasonInstall codelldb
+	-- NOTE: install rust_analyzer -- using mason run :MasonInstall rust-analyzer
+	-- {
+	-- 	'mrcjkb/rustaceanvim',
+	-- 	version = '^4', -- Recommended
+	-- 	ft = { 'rust' },
 	-- },
 }
