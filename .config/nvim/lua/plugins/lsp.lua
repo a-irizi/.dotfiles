@@ -19,6 +19,7 @@ local servers = {
 		workspace = { checkThirdParty = false },
 		telemetry = { enable = false },
 	},
+	tailwindcss = {},
 	tsserver = {},
 	rust_analyzer = {
 		settings = {
@@ -46,6 +47,7 @@ local on_attach = function(_, bufnr)
 	keymap({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature help")
 	keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
 	keymap("n", "<leader>ca", vim.lsp.buf.code_action, "Code actions")
+	keymap({"n", "i"}, "<M-CR>", vim.lsp.buf.code_action, "Code actions")
 	keymap("n", "<leader>fm", vim.lsp.buf.format, "Format document")
 	keymap("n", "gd", builtin.lsp_definitions, "[G]oto [D]efinition")
 	keymap("n", "gr", builtin.lsp_references, "[G]oto [R]eferences")
