@@ -28,6 +28,7 @@ return {
 				"python",
 				"rust",
 				"sql",
+				"tmux",
 				"toml",
 				"tsx",
 				"typescript",
