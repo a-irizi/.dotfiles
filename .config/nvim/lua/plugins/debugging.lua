@@ -1,10 +1,10 @@
 -- NOTE: ensure lldb is installed on the system
 return {
 	{
+		"rcarriga/nvim-dap-ui", dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" }
+	},
+	{
 		"mfussenegger/nvim-dap",
-		dependencies = {
-			"rcarriga/nvim-dap-ui"
-		},
 		config = function()
 			local dap = require("dap")
 			Keymap("n", "<leader>dc", dap.continue, { desc = "[D]ebug [C]ontinue" })
