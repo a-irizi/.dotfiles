@@ -1,0 +1,4 @@
+import = ["/home/anass/.config/alacritty/theme.toml", "/home/anass/.config/alacritty/fonts.toml"]
+
+[env]
+TERM = "xterm-256color"
