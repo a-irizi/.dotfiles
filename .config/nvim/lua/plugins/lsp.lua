@@ -4,7 +4,7 @@ local servers = {
 	cssmodules_ls = {},
 	docker_compose_language_service = {},
 	dockerls = {},
-	gopls = {
+	gopls = { -- Remember to manually install goimports_reviser, gofumpt and golines using mason
 		gopls = {
 			completeUnimported = true,
 			usePlaceholders = true,
@@ -33,6 +33,8 @@ local servers = {
 }
 
 local on_attach = function(_, bufnr)
+	vim.lsp.inlay_hint.enable(true)
+
 	local keymap = function(mode, keys, func, desc)
 		if desc then
 			desc = "LSP: " .. desc
@@ -47,7 +49,7 @@ local on_attach = function(_, bufnr)
 	keymap({ "n", "i" }, "<C-k>", vim.lsp.buf.signature_help, "Signature help")
 	keymap("n", "gd", vim.lsp.buf.definition, "Go to definition")
 	keymap("n", "<leader>ca", vim.lsp.buf.code_action, "Code actions")
-	keymap({"n", "i"}, "<M-CR>", vim.lsp.buf.code_action, "Code actions")
+	keymap({ "n", "i" }, "<M-CR>", vim.lsp.buf.code_action, "Code actions")
 	keymap("n", "<leader>fm", vim.lsp.buf.format, "Format document")
 	keymap("n", "gd", builtin.lsp_definitions, "[G]oto [D]efinition")
 	keymap("n", "gr", builtin.lsp_references, "[G]oto [R]eferences")
@@ -57,6 +59,10 @@ local on_attach = function(_, bufnr)
 	keymap("n", "<leader>ds", builtin.lsp_document_symbols, "[D]ocument [S]ymbols")
 	keymap("n", "<leader>ws", builtin.lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 	keymap("n", "<leader>q", builtin.diagnostics, "[W]orkspace [S]ymbols")
+	keymap("n", "<leader>si", function()
+		local is_inlay_hit_enabled = vim.lsp.inlay_hint.is_enabled(nil);
+		vim.lsp.inlay_hint.enable(not is_inlay_hit_enabled)
+	end)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
