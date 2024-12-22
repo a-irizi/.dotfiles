@@ -1,4 +1,4 @@
-local luasnip = require("luasnip")
+local luasnip = require('luasnip')
 local s = luasnip.s --> snnipet
 local i = luasnip.i --> insert node
 local t = luasnip.t --> text node
@@ -10,15 +10,15 @@ local f = luasnip.function_node
 local sn = luasnip.snippet_node
 local isn = luasnip.indent_snippet_node
 
-local fmt = require("luasnip.extras.fmt").fmt
-local rep = require("luasnip.extras").rep
+local fmt = require('luasnip.extras.fmt').fmt
+local rep = require('luasnip.extras').rep
 
 local snippets, autosnippets = {}, {}
 
 local snippetBoilerPlate = s(
   {
-    trig = ";sbp",
-    dscr = "Luasnip snippet file boiler plate.",
+    trig = ';sbp',
+    dscr = 'Luasnip snippet file boiler plate.',
   },
   fmt(
     [[
@@ -45,7 +45,7 @@ return snippets, autosnippets
     ]],
 
     {
-      i(1, "-- insert snippets here"),
+      i(1, '-- insert snippets here'),
     }
   )
 )
@@ -53,8 +53,8 @@ table.insert(snippets, snippetBoilerPlate)
 
 local newSnippetSnippet = s(
   {
-    trig = ";nsnp",
-    dscr = "New Luasnip snippet boiler plate",
+    trig = ';nsnp',
+    dscr = 'New Luasnip snippet boiler plate',
   },
   fmt(
     [[
@@ -67,8 +67,8 @@ table.insert({}, {})
 {}
     ]],
     {
-      i(1, "mySnip"),
-      c(2, {
+      i(1, 'mySnip'),
+      c(3, {
         isn(
           nil,
           fmt(
@@ -79,11 +79,11 @@ table.insert({}, {})
             }}
                           ]],
             {
-              r(1, "trigger"),
-              i(2, "snippet description"),
+              r(1, 'trigger'),
+              i(2, 'snippet description'),
             }
           ),
-          "$PARENT_INDENT\t"
+          '$PARENT_INDENT\t'
         ),
         isn(
           nil,
@@ -92,13 +92,13 @@ table.insert({}, {})
             "{}"
                         ]],
             {
-              r(1, "trigger"),
+              r(1, 'trigger'),
             }
           ),
-          "$PARENT_INDENT\t"
+          '$PARENT_INDENT\t'
         ),
       }),
-      c(3, {
+      c(4, {
         sn(
           nil,
           fmt(
@@ -130,13 +130,13 @@ table.insert({}, {})
               i(1),
             }
           ),
-          "$PARENT_INDENT\t"
+          '$PARENT_INDENT\t'
         ),
       }),
 
-      c(4, {
-        i(1, "autosnippets"),
-        i(2, "snippets"),
+      c(2, {
+        i(1, 'autosnippets'),
+        i(2, 'snippets'),
       }),
 
       rep(1),
@@ -145,28 +145,28 @@ table.insert({}, {})
   ),
   {
     stored = {
-      ["trigger"] = i(1, "snippetTrigger"),
+      ['trigger'] = i(1, 'snippetTrigger'),
     },
   }
 )
 table.insert(snippets, newSnippetSnippet)
 
 local aLocal = s(
-  ";lcl",
+  ';lcl',
   fmt(
     [[
 local {} = {}
     ]],
     {
-      i(1, "myVar"),
-      i(2, "nil"),
+      i(1, 'myVar'),
+      i(2, 'nil'),
     }
   )
 )
 table.insert(autosnippets, aLocal)
 
 local aLFunction = s(
-  "lfnc",
+  'lfnc',
   fmt(
     [[
 {}
@@ -183,9 +183,9 @@ end
 {}
     ]],
             {
-              i(1, "myVar"),
-              c(2, { t(""), i(1, "args") }),
-              i(3, "-- TODO: insert function body"),
+              i(1, 'myVar'),
+              c(2, { t(''), i(1, 'args') }),
+              i(3, '-- TODO: insert function body'),
               i(0),
             }
           )
@@ -200,9 +200,9 @@ end
 {}
     ]],
             {
-              i(1, "myVar"),
-              c(2, { t(""), i(1, "args") }),
-              i(3, "-- TODO: insert function body"),
+              i(1, 'myVar'),
+              c(2, { t(''), i(1, 'args') }),
+              i(3, '-- TODO: insert function body'),
               i(0),
             }
           )
@@ -214,7 +214,7 @@ end
 table.insert(autosnippets, aLFunction)
 
 local aFunction = s(
-  "fnc",
+  'fnc',
   fmt(
     [[
 {}
@@ -231,9 +231,9 @@ end
 {}
     ]],
             {
-              i(1, "myVar"),
-              c(2, { t(""), i(1, "args") }),
-              i(3, "-- TODO: insert function body"),
+              i(1, 'myVar'),
+              c(2, { t(''), i(1, 'args') }),
+              i(3, '-- TODO: insert function body'),
               i(0),
             }
           )
@@ -248,9 +248,9 @@ end
 {}
     ]],
             {
-              i(1, "myVar"),
-              c(2, { t(""), i(1, "args") }),
-              i(3, "-- TODO: insert function body"),
+              i(1, 'myVar'),
+              c(2, { t(''), i(1, 'args') }),
+              i(3, '-- TODO: insert function body'),
               i(0),
             }
           )
@@ -262,25 +262,25 @@ end
 table.insert(autosnippets, aFunction)
 
 local function random_lang()
-  return ({ "LUA", "VIML", "VIML9" })[math.floor(math.random() / 2 + 1.5)]
+  return ({ 'LUA', 'VIML', 'VIML9' })[math.floor(math.random() / 2 + 1.5)]
 end
 
-luasnip.env_namespace("MY", { vars = { NAME = "LuaSnip", LANG = random_lang } })
+luasnip.env_namespace('MY', { vars = { NAME = 'LuaSnip', LANG = random_lang } })
 
 -- then you can use  $MY_NAME and $MY_LANG in your snippets
 
-luasnip.env_namespace("SYS", { vars = os.getenv, eager = { "HOME" } })
+luasnip.env_namespace('SYS', { vars = os.getenv, eager = { 'HOME' } })
 
 -- then you can use  $SYS_HOME which was eagerly initialized but also $SYS_USER (or any other system environment var) in your snippets
 
 local usestate = s(
-  "custom_env",
+  'custom_env',
   d(1, function(args, parent)
     local env = parent.snippet.env
     return sn(
       nil,
       t({
-        "file name " .. env.TM_FILENAME:match("(.+)%..+"),
+        'file name ' .. env.TM_FILENAME:match('(.+)%..+'),
       })
     )
   end, {})

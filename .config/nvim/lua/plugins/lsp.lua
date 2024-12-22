@@ -32,18 +32,52 @@ local servers = {
     -- end,
   },
   rust_analyzer = {
-    settings = {
-      ['rust-analyzer'] = {
-        cargo = {
-          allFeatures = true,
+    ['rust-analyzer'] = {
+      formatting = {
+        indentWidth = 2,
+      },
+      cargo = {
+        allFeatures = true,
+        loadOutDirsFromCheck = true,
+        runBuildScripts = true,
+      },
+      checkOnSave = {
+        allFeatures = true,
+        command = 'clippy',
+        extraArgs = {
+          '--',
+          '--no-deps',
+          '-Dclippy::correctness',
+          '-Dclippy::complexity',
+          '-Wclippy::perf',
+          '-Wclippy::pedantic',
+        },
+        procMacro = {
+          enable = true,
+          ignored = {
+            ['async-trait'] = { 'async_trait' },
+            ['napi-derive'] = { 'napi' },
+            ['async-recursion'] = { 'async_recursion' },
+          },
         },
       },
     },
   },
 }
 
-local on_attach = function(_, bufnr)
+local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+local on_attach = function(client, bufnr)
   -- vim.lsp.inlay_hint.enable(true)
+  if client.name == 'rust_analyzer' then
+    vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      group = augroup,
+      buffer = bufnr,
+      callback = function()
+        vim.lsp.buf.format()
+      end,
+    })
+  end
 
   local keymap = function(mode, keys, func, desc)
     if desc then
@@ -56,7 +90,7 @@ local on_attach = function(_, bufnr)
   local builtin = require('telescope.builtin')
 
   keymap('n', 'K', vim.lsp.buf.hover, 'Displays hover information')
-  keymap({ 'n', 'i' }, '<C-k>', vim.lsp.buf.signature_help, 'Signature help')
+  keymap({ 'n', 'i' }, '<A-k>', vim.lsp.buf.signature_help, 'Signature help')
   keymap('n', 'gc', function()
     vim.lsp.buf.typehierarchy('subtypes')
   end, 'Go to children definition')
@@ -67,8 +101,8 @@ local on_attach = function(_, bufnr)
   keymap({ 'n', 'i' }, '<M-CR>', vim.lsp.buf.code_action, 'Code actions')
   keymap('n', '<leader>fm', function()
     vim.lsp.buf.format({
-      filter = function(client)
-        return client.name ~= 'ts_ls'
+      filter = function(clt)
+        return clt.name ~= 'ts_ls'
       end,
     })
   end, 'Format document')
@@ -140,18 +174,44 @@ return {
     'neovim/nvim-lspconfig',
     dependencies = {
 
-      { 'folke/neodev.nvim',             opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
       { 'nvim-telescope/telescope.nvim', tag = '0.1.5' },
-      { 'j-hui/fidget.nvim',             opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
     },
   },
+
   {
-    'rust-lang/rust.vim',
-    ft = 'rust',
+    'saecki/crates.nvim',
+    event = { 'BufRead Cargo.toml' },
     config = function()
-      vim.g.rustfmt_autosave = 1
+      require('crates').setup {
+        lsp = {
+          enabled = true,
+          on_attach = on_attach,
+          actions = true,
+          completion = true,
+          hover = true,
+        },
+        completion = {
+          crates = {
+            enabled = true, -- disabled by default
+            max_results = 8, -- The maximum number of search results to display
+            min_chars = 3, -- The minimum number of charaters to type before completions begin appearing
+          },
+          cmp = {
+            enabled = true,
+          },
+        },
+      }
     end,
   },
+  -- {
+  --   'rust-lang/rust.vim',
+  --   ft = 'rust',
+  --   config = function()
+  --     vim.g.rustfmt_autosave = 1
+  --   end,
+  -- },
   -- {
   --      "simrat39/rust-tools.nvim",
   --      dependencies = "neovim/nvim-lspconfig",
