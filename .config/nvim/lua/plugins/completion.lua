@@ -1,49 +1,23 @@
 return {
   {
-    'L3MON4D3/LuaSnip',
-    dependencies = { 'saadparwaiz1/cmp_luasnip', 'rafamadriz/friendly-snippets' },
-  },
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      'hrsh7th/cmp-nvim-lsp',
-      'nvim-highlight-colors',
+    'saghen/blink.cmp',
+    -- optional: provides snippets for the snippet source
+    dependencies = { 'L3MON4D3/LuaSnip' },
+    version = '*',
+    ---@module 'blink.cmp'
+    ---@type blink.cmp.Config
+    opts = {
+      sources = {
+        default = { 'lsp', 'path', 'luasnip', 'buffer' },
+      },
+
+      appearance = {
+        use_nvim_cmp_as_default = false,
+        nerd_font_variant = 'mono',
+      },
+
+      signature = { enabled = true },
     },
-    config = function()
-      local cmp = require('cmp')
-      cmp.setup({
-        -- formatting = {
-        --   format = require('nvim-highlight-colors').format,
-        -- },
-        snippet = {
-          -- REQUIRED - you must specify a snippet engine
-          expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-          end,
-        },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-        mapping = cmp.mapping.preset.insert({
-          ['<C-g>'] = function()
-            if cmp.visible_docs() then
-              cmp.close_docs()
-            else
-              cmp.open_docs()
-            end
-          end,
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-        }),
-        sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
-        }, { { name = 'buffer' } }),
-      })
-    end,
+    opts_extend = { 'sources.default' },
   },
 }

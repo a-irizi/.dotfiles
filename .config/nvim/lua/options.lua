@@ -51,6 +51,10 @@ vim.o.cursorline = true
 vim.opt.list = true
 vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+-- spell
+vim.opt.spelllang = 'en_us'
+vim.opt.spell = true
+
 -- tabs
 vim.api.nvim_create_autocmd('FileType', {
   pattern = { '*' },

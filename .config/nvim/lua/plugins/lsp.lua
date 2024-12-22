@@ -148,9 +148,7 @@ return {
   },
   {
     'williamboman/mason-lspconfig.nvim',
-    dependencies = {
-      { 'nvim-telescope/telescope.nvim', tag = '0.1.5' },
-    },
+    dependencies = 'nvim-telescope/telescope.nvim',
     config = function()
       local mason_lspconfig = require('mason-lspconfig')
 
@@ -173,10 +171,10 @@ return {
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-
       { 'folke/neodev.nvim', opts = {} },
-      { 'nvim-telescope/telescope.nvim', tag = '0.1.5' },
+      { 'nvim-telescope/telescope.nvim' },
       { 'j-hui/fidget.nvim', opts = {} },
+      { 'saghen/blink.cmp' },
     },
   },
 
@@ -205,35 +203,4 @@ return {
       }
     end,
   },
-  -- {
-  --   'rust-lang/rust.vim',
-  --   ft = 'rust',
-  --   config = function()
-  --     vim.g.rustfmt_autosave = 1
-  --   end,
-  -- },
-  -- {
-  --      "simrat39/rust-tools.nvim",
-  --      dependencies = "neovim/nvim-lspconfig",
-  --      ft = "rust",
-  --      opts = function()
-  --              return {
-  --                      server = {
-  --                              on_attach = on_attach,
-  --                              capabilities = capabilities,
-  --                      },
-  --              }
-  --      end,
-  --      config = function(_, opts)
-  --              require "rust-tools".setup(opts);
-  --      end,
-  -- },
-
-  -- NOTE: install codelldb -- using mason run :MasonInstall codelldb
-  -- NOTE: install rust_analyzer -- using mason run :MasonInstall rust-analyzer
-  -- {
-  --      'mrcjkb/rustaceanvim',
-  --      version = '^4', -- Recommended
-  --      ft = { 'rust' },
-  -- },
 }
