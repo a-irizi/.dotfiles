@@ -9,9 +9,9 @@ return {
     require('nvim-treesitter.configs').setup({
       ensure_installed = {
         'angular',
-        'css',
-        'scss',
         'bash',
+        'css',
+        'fish',
         'gitattributes',
         'gitcommit',
         'git_config',
@@ -23,6 +23,7 @@ return {
         'javascript',
         'json',
         'json5',
+        'kotlin',
         'lua',
         'markdown',
         'markdown_inline',
@@ -31,6 +32,7 @@ return {
         'python',
         'query',
         'rust',
+        'scss',
         'sql',
         'svelte',
         'tmux',
