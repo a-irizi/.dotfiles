@@ -275,6 +275,46 @@ local usestate = s(
 )
 table.insert(snippets, usestate)
 
+local if_let_some = s(
+  {
+    trig = 'ils',
+    dscr = 'if let Some',
+  },
+  fmt(
+    [[
+if let Some({}) = {} {{
+  {}
+}}
+    ]],
+    {
+      i(2),
+      i(1),
+      i(0),
+    }
+  )
+)
+table.insert(snippets, if_let_some)
+
+local if_let_result = s(
+  {
+    trig = 'ilr',
+    dscr = 'if let Result',
+  },
+  fmt(
+    [[
+if let {}({}) = {} {{
+  {}
+}}
+    ]],
+    {
+      c(2, { t('Ok'), t('Err') }),
+      i(3),
+      i(1),
+      i(0),
+    }
+  )
+)
+table.insert(snippets, if_let_result)
 -- local rust_last_local_variable = function()
 --   local node = vim.treesitter.get_node()
 --   node.prev_sibling()
