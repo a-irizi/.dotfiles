@@ -7,6 +7,9 @@ return {
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
     opts = {
+      completion = {
+        ghost_text = { enabled = true },
+      },
       sources = {
         default = { 'lsp', 'path', 'luasnip', 'buffer' },
       },
@@ -17,6 +20,13 @@ return {
       },
 
       signature = { enabled = true },
+      keymap = {
+        preset = 'default',
+        ['<Tab>'] = {},
+        ['<S-Tab>'] = {},
+        ['<M-l>'] = { 'snippet_forward', 'fallback' },
+        ['<M-h>'] = { 'snippet_backward', 'fallback' },
+      },
     },
     opts_extend = { 'sources.default' },
   },
