@@ -171,9 +171,9 @@ return {
   {
     'neovim/nvim-lspconfig',
     dependencies = {
-      { 'folke/neodev.nvim', opts = {} },
+      { 'folke/neodev.nvim',            opts = {} },
       { 'nvim-telescope/telescope.nvim' },
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',            opts = {} },
       { 'saghen/blink.cmp' },
     },
   },
@@ -192,12 +192,9 @@ return {
         },
         completion = {
           crates = {
-            enabled = true, -- disabled by default
-            max_results = 8, -- The maximum number of search results to display
-            min_chars = 3, -- The minimum number of charaters to type before completions begin appearing
-          },
-          cmp = {
-            enabled = true,
+            enabled = true,  -- disabled by default
+            max_results = 20, -- The maximum number of search results to display
+            min_chars = 1,   -- The minimum number of charaters to type before completions begin appearing
           },
         },
       }
